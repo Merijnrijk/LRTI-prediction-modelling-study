@@ -1,5 +1,4 @@
 # Minimal executable prediction function of final model
-
 predict_risk <- function(age, female_sex, cmd_1, cmd_2, pneumonia_diagnosis, hospitalisation, pneumonia_history, 
                          malignancy, copd_asthma, dementia, influenza_vaccination, immunosuppressant, inhalation_medication,
                          antibiotic_use, antidepressant) {
@@ -27,8 +26,7 @@ predict_risk <- function(age, female_sex, cmd_1, cmd_2, pneumonia_diagnosis, hos
   plogis(lp)
 }
 
-# Test cases
-
+# Test cases as described in Supplementary materials
 test_cases <- data.frame(
   age = c(76, 50, 88),
   female_sex = c(1, 0, 1),
@@ -47,10 +45,7 @@ test_cases <- data.frame(
   antidepressant = c(0, 0, 0)
 )
 
-test_cases
-
-# Predict risk
-
+# Predict risk in test cases
 test_cases$risk <- with(
   test_cases,
   predict_risk(
@@ -71,3 +66,23 @@ test_cases$risk <- with(
     antidepressant = antidepressant
   )
 )
+
+# Calculate risk for any new patient (adjust predictor values based on patient characteristics)
+new_patient_risk <- predict_risk(
+  age = 75,
+  female_sex = 1,
+  cmd_1 = 1,
+  cmd_2 = 0,
+  pneumonia_diagnosis = 1,
+  hospitalisation = 0,
+  pneumonia_history = 0,
+  malignancy = 0,
+  copd_asthma = 1,
+  dementia = 0,
+  influenza_vaccination = 1,
+  immunosuppressant = 0,
+  inhalation_medication = 1,
+  antibiotic_use = 1,
+  antidepressant = 0
+)
+new_patient_risk
