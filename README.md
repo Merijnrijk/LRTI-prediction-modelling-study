@@ -29,3 +29,5 @@ Information on R scripts published on this repository:
 - (model validation)
 - Executable_prediction_function_and_examples.R: R script that provides an executable prediction function to predict individual risk, including calculation of predicted
   risks for three example patients (corresponding to the examples included in the Supplementary materials)
+
+  ! Please note that this risk calculating prediction function is not yet Medical Device Regulation (MDR-)approved, and is thus not intended for medical use.
