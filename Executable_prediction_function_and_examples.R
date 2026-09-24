@@ -1,3 +1,6 @@
+# ! Please note that this risk calculating prediction function is not yet Medical Device Regulation (MDR-)approved, 
+# and is thus not intended for medical use.
+
 # Minimal executable prediction function of final model
 predict_risk <- function(age, female_sex, cmd_1, cmd_2, pneumonia_diagnosis, hospitalisation, pneumonia_history, 
                          malignancy, copd_asthma, dementia, influenza_vaccination, immunosuppressant, inhalation_medication,
