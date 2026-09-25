@@ -36,11 +36,9 @@ R and package version details:
 R version 4.4.3
 
 attached base packages:
-
 stats     graphics  grDevices utils     datasets  methods   base     
 
 other attached packages:
-
 dcurves_0.4.0           
 ggthemes_5.1.0          
 CalibrationCurves_2.0.1 metafor_4.6-0          
