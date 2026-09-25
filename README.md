@@ -23,9 +23,9 @@ external cross-validation (based on year) was performed for the final model. The
 based on measures of discrimination (c-statistic), calibration (intercept and slope), distribution of predicted risks, and decision-curve analysis (upon external validation).
 
 Information on R scripts published on this repository:
-- (development cohort preparation)
-- (validation cohort preparation)
-- (model development)
+- 0. R and package versions
+- 1. Datacleaning_cohort_construction_development.R: initial data cleaning and cohort construction of development cohort
+- 2. Linkage_JGPN_CBS.R: linkage of JGPN development cohort and CBS data
 - (model validation)
 - Executable_prediction_function_and_examples.R: R script that provides an executable prediction function to predict individual risk, including calculation of predicted
   risks for three example patients (corresponding to the examples included in the Supplementary materials)
