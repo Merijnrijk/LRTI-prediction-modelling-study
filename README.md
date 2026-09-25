@@ -32,10 +32,8 @@ Information on R scripts published on this repository:
 
 **! Please note that this risk calculating prediction function is not yet Medical Device Regulation (MDR-)approved, and is thus not intended for medical use.**
 
-
+R and package version details:
 R version 4.4.3
-Platform: x86_64-w64-mingw32/x64
-Running under: Windows 11 x64 (build 22631)
 
 attached base packages:
 [1] stats     graphics  grDevices utils     datasets  methods   base     
