@@ -39,11 +39,31 @@ attached base packages:
 [1] stats     graphics  grDevices utils     datasets  methods   base     
 
 other attached packages:
- [1] dcurves_0.4.0           ggthemes_5.1.0          CalibrationCurves_2.0.1 metafor_4.6-0          
- [5] numDeriv_2016.8-1.1     metadat_1.2-0           expss_0.11.6            maditr_0.8.4           
- [9] DescTools_0.99.54       pmsampsize_1.1.3        patchwork_1.3.2         tableone_0.13.2        
-[13] boot_1.3-30             glmnetUtils_1.1.9       glmnet_4.1-8            Matrix_1.7-0           
-[17] rms_8.1-1               Hmisc_5.2-6             pROC_1.18.5             lubridate_1.9.3        
-[21] forcats_1.0.0           stringr_1.5.1           purrr_1.1.0             readr_2.1.5            
-[25] tidyr_1.3.1             tibble_3.2.1            ggplot2_4.0.1           tidyverse_2.0.0        
-[29] dplyr_1.1.4
+dcurves_0.4.0           
+ggthemes_5.1.0          
+CalibrationCurves_2.0.1 metafor_4.6-0          
+numDeriv_2016.8-1.1     
+metadat_1.2-0           
+expss_0.11.6            
+maditr_0.8.4           
+DescTools_0.99.54       
+pmsampsize_1.1.3        
+patchwork_1.3.2         
+tableone_0.13.2        
+boot_1.3-30             
+glmnetUtils_1.1.9       
+glmnet_4.1-8            
+Matrix_1.7-0           
+rms_8.1-1               
+Hmisc_5.2-6             
+pROC_1.18.5             
+lubridate_1.9.3        
+forcats_1.0.0           
+stringr_1.5.1           
+purrr_1.1.0             
+readr_2.1.5            
+tidyr_1.3.1             
+tibble_3.2.1            
+ggplot2_4.0.1           
+tidyverse_2.0.0        
+dplyr_1.1.4
