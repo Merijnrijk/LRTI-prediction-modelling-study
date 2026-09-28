@@ -118,7 +118,7 @@ ho20 <- ho20 %>%
     opnamedatum = as.Date(ifelse(LBZOpnamedatum >= indexdate & LBZOpnamedatum - indexdate  <= 30, LBZOpnamedatum, NA))
   )
 ho5 <- filter(ho20, !is.na(opnamedatum) == T)
-# Keep complete info for sensitivity analysis)
+# Keep complete info for sensitivity analysis
 ho_complete <- rbind(ho1, ho2, ho3, ho4, ho5)
 # Keep relevant info
 ho1 <- subset(ho1, select = c('rin', 'indexdate', 'opnamedatum'))
