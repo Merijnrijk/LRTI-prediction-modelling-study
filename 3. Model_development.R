@@ -297,10 +297,10 @@ internal_val$basic1 <- function(data, indices) {
   intercept_o <- perf_o$Calibration$Intercept[[1]]
   slope_o <- perf_o$Calibration$Slope[[1]]
   # Calculate apparent-minus-test optimism per performance estimate
-  auc <- auc_o - auc_b
-  rsq <- rsq_o - rsq_b
-  intercept <- intercept_o - intercept_b
-  slope <- slope_o - slope_b
+  auc <- auc_b - auc_o
+  rsq <- rsq_b - rsq_o
+  intercept <- intercept_b - intercept_o
+  slope <- slope_b - slope_o
   return(c(auc, rsq, intercept, slope))
 }
 
@@ -345,10 +345,10 @@ internal_val$basic2 <- function(data, indices) {
   intercept_o <- perf_o$Calibration$Intercept[[1]]
   slope_o <- perf_o$Calibration$Slope[[1]]
   # Calculate apparent-minus-test optimism per performance estimate
-  auc <- auc_o - auc_b
-  rsq <- rsq_o - rsq_b
-  intercept <- intercept_o - intercept_b
-  slope <- slope_o - slope_b
+  auc <- auc_b - auc_o
+  rsq <- rsq_b - rsq_o
+  intercept <- intercept_b - intercept_o
+  slope <- slope_b - slope_o
   return(c(auc, rsq, intercept, slope))
 }
 
@@ -393,10 +393,10 @@ internal_val$cvd1 <- function(data, indices) {
   intercept_o <- perf_o$Calibration$Intercept[[1]]
   slope_o <- perf_o$Calibration$Slope[[1]]
   # Calculate apparent-minus-test optimism per performance estimate
-  auc <- auc_o - auc_b
-  rsq <- rsq_o - rsq_b
-  intercept <- intercept_o - intercept_b
-  slope <- slope_o - slope_b
+  auc <- auc_b - auc_o
+  rsq <- rsq_b - rsq_o
+  intercept <- intercept_b - intercept_o
+  slope <- slope_b - slope_o
   return(c(auc, rsq, intercept, slope))
 }
 
@@ -441,10 +441,10 @@ internal_val$cvd2 <- function(data, indices) {
   intercept_o <- perf_o$Calibration$Intercept[[1]]
   slope_o <- perf_o$Calibration$Slope[[1]]
   # Calculate apparent-minus-test optimism per performance estimate
-  auc <- auc_o - auc_b
-  rsq <- rsq_o - rsq_b
-  intercept <- intercept_o - intercept_b
-  slope <- slope_o - slope_b
+  auc <- auc_b - auc_o
+  rsq <- rsq_b - rsq_o
+  intercept <- intercept_b - intercept_o
+  slope <- slope_b - slope_o
   return(c(auc, rsq, intercept, slope))
 }
 
@@ -489,10 +489,10 @@ internal_val$clinical <- function(data, indices) {
   intercept_o <- perf_o$Calibration$Intercept[[1]]
   slope_o <- perf_o$Calibration$Slope[[1]]
   # Calculate apparent-minus-test optimism per performance estimate
-  auc <- auc_o - auc_b
-  rsq <- rsq_o - rsq_b
-  intercept <- intercept_o - intercept_b
-  slope <- slope_o - slope_b
+  auc <- auc_b - auc_o
+  rsq <- rsq_b - rsq_o
+  intercept <- intercept_b - intercept_o
+  slope <- slope_b - slope_o
   return(c(auc, rsq, intercept, slope))
 }
 
@@ -537,10 +537,10 @@ internal_val$ehr1 <- function(data, indices) {
   intercept_o <- perf_o$Calibration$Intercept[[1]]
   slope_o <- perf_o$Calibration$Slope[[1]]
   # Calculate apparent-minus-test optimism per performance estimate
-  auc <- auc_o - auc_b
-  rsq <- rsq_o - rsq_b
-  intercept <- intercept_o - intercept_b
-  slope <- slope_o - slope_b
+  auc <- auc_b - auc_o
+  rsq <- rsq_b - rsq_o
+  intercept <- intercept_b - intercept_o
+  slope <- slope_b - slope_o
   return(c(auc, rsq, intercept, slope))
 }
 
@@ -585,10 +585,10 @@ internal_val$ehr2 <- function(data, indices) {
   intercept_o <- perf_o$Calibration$Intercept[[1]]
   slope_o <- perf_o$Calibration$Slope[[1]]
   # Calculate apparent-minus-test optimism per performance estimate
-  auc <- auc_o - auc_b
-  rsq <- rsq_o - rsq_b
-  intercept <- intercept_o - intercept_b
-  slope <- slope_o - slope_b
+  auc <- auc_b - auc_o
+  rsq <- rsq_b - rsq_o
+  intercept <- intercept_b - intercept_o
+  slope <- slope_b - slope_o
   return(c(auc, rsq, intercept, slope))
 }
 
