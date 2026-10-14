@@ -147,6 +147,13 @@ fit$clinical <- list()
 fit$ehr1 <- list()
 fit$ehr2 <- list()
 
+# Set seed and define and save folds for reproducibility
+set.seed(12321)
+foldid <- lapply(x, function(X) {
+  sample(rep(1:10, length.out = nrow(X)))
+})
+saveRDS(foldid, "fold_assignments.rds")
+
 # Fit models using elastic net with alpha = 0.5
 for (i in 1:7) {
   fit[[i]] <- cv.glmnet(x = x[[i]], # Cross-validate to find optimal lambda (hyperparameter tuning)
@@ -155,7 +162,7 @@ for (i in 1:7) {
                         family = 'binomial',
                         alpha = 0.5,
                         type.measure = 'deviance',
-                        nfolds = 10,
+                        foldid = foldid[[i]],
                         trace.it = 1L)
   plot(fit[[i]], main = i)
 }
