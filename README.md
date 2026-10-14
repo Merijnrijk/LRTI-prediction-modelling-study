@@ -28,7 +28,7 @@ Information on R scripts published on this repository:
 - '2. Linkage_datacleaning_ANHA_CBS' - Script for linkage of ANHA primary care cohort to CBS hospitalization and mortality data, including datacleaning
 - '3. Model_development' - Script for model development procedures
 - '4. Model_validation' - Script for model external validation procedures
-- '5. Executable_prediction_function_and_examples' - Script that provides an executable prediction function to predict individual risk, including calculation of predicted
-  risks for three example patients (corresponding to the examples included in the Supplementary materials)
+- '5. Executable_prediction_function_and_examples' - Script that constructs an executable prediction function to predict individual risk based on full-precision coefficients of the final model, including calculation of predicted risks for three example patients (corresponding to the examples included in the Supplementary materials)
+- 'Coefficients_final_model.csv' - csv-file containing predictor vales and full-precision coefficients of the final model
 
 **! Please note that this risk calculating prediction function is not yet Medical Device Regulation (MDR-)approved, and is thus not intended for medical use.**
