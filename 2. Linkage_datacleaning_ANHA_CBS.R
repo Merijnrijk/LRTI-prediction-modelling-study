@@ -205,7 +205,7 @@ anha <- anha %>%
     med_laba_lama = ifelse(!is.na(med_laba_lama) & med_laba_lama < start_epi, 1, 0),
     med_ics = ifelse(!is.na(med_ics) & med_ics < start_epi, 1, 0),
     med_ics_laba = ifelse(!is.na(med_ics_laba) & med_ics_laba < start_epi, 1, 0),
-    med_ics_laba_lama = ifelse(!is.na(med_ics_laba_lama) & med_ics_laba_lama < start_epi, 1, 0),
+    med_ics_laba_lama = ifelse(!is.na(med_ics_laba_lama) & med_ics_laba_lama < start_epi, 1, 0)
   )
 anha <- anha %>%
   mutate(
