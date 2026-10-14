@@ -7,7 +7,7 @@ setwd(wd)
 
 # Load full-precision coefficients
 coefs <- read.csv(
-  "coefficients_final_model.csv",
+  "Coefficients_final_model.csv",
   sep = ';',
   stringsAsFactors = FALSE
 )
