@@ -9,6 +9,7 @@ anha <- read.csv('9199_UMCU_ELEMENT_CBS9199_ANHA_20250725_ttpCBKV1.csv', header 
 ## Loading packages
 library(tidyverse)
 library(haven)
+library(lubridate)
 
 ## Select relevant cohort for ELEMENT (NB: last 30 days of 2023 for follow-up)
 anha$start_epi <- dmy(anha$start_epi)
