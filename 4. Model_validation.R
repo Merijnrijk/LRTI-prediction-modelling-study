@@ -54,7 +54,7 @@ anha <- anha %>%
 
 ## Table 1 of validation cohort
 library(tableone)
-factorvars <- c('geslacht', 'jaar', 'diabetes', 'smokstatus', 'malign_excl_huid', 'pneumonie', 'dementie', 'opname_1j', 'immunosupp', 'inhalatiemed', 'med_antidepr', 'ab_alg_voor_epi', 'start_icpc', 'cva_tia', 'le_dvt', 'copd_astma', 'aant_hvz', 'influenza_vacc', 'outcome_hosp', 'outcome_mort')
+factorvars <- c('geslacht', 'jaar', 'diabetes', 'smokstatus', 'malign_excl_huid', 'pneumonie', 'dementie', 'opname_1j_voor_episode', 'immunosupp', 'inhalatiemed', 'med_antidepr', 'ab_alg_voor_epi', 'start_icpc', 'cva_tia', 'le_dvt', 'copd_astma', 'aant_hvz', 'influenza_vacc', 'outcome_hosp', 'outcome_mort')
 nonnormal <- c('leeftijd', 'aant_cont_voor_episode', 'frailty_index')
 vars <- c(factorvars, nonnormal)
 table1 <- CreateTableOne(vars = vars, data = anha, factorVars = factorvars, strata = 'outcome', addOverall = T)
@@ -94,7 +94,7 @@ pred_val$jaar <- anha$jaar
 pred_val$multimorbidity <- anha$multimorbidity
 # Create model matrix
 x_v <- model.matrix(outcome ~ leeftijd*factor(geslacht) + factor(aant_hvz) + opname_1j_voor_episode + pneumonie + malign_excl_huid + copd_astma + dementie + influenza_vacc + immunosupp + inhalatiemed + ab_alg_voor_epi + med_antidepr + factor(start_icpc), data = anha)[,-1]
-x_vb <- x1 <- model.matrix(outcome ~ leeftijd*factor(geslacht), data = anha)[,-1]
+x_vb <- model.matrix(outcome ~ leeftijd*factor(geslacht), data = anha)[,-1]
 # Formal check whether model matrices (development and validation cohort) are identical
 dim(x[[5]])
 dim(x_v)
