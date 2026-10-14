@@ -7,7 +7,7 @@ date: "2023-10-04"
 ###################################################
 ######### ELEMENT Prediction model study ##########
 ###################################################
-#> Step 1: loading packages and settings
+#> Step 1: loading packages, settings, paths
 #> Step 2: loading data
 #> Step 3: creating new variables
 #> Step 4: baseline table of cohort
@@ -20,7 +20,7 @@ date: "2023-10-04"
 #> Step 11: assess incremental predictive value of CVD
 #> Step 12: internal-external cross-validation (by year)
 
-#Step 1: load packages, settings
+#Step 1: load packages, settings, paths
 library(dplyr)
 library(tidyverse)
 library(pROC)
@@ -38,9 +38,14 @@ library(CalibrationCurves)
 library(ggthemes)
 library(dcurves)
 options(scipen=999, digits=3)
+# Set paths for input and output data
+path_input <- # Insert path where input data is stored
+path_output <- # insert path where output will be stored
 
 # Step 2: load data file
-E <- read.csv('H:/Merijn/Extern cohort (JHN)/ELEMENT_PM_1/ELEMENT_PM1_dataset.csv')
+setwd(path_input)
+E <- read.csv('ELEMENT_PM1_dataset.csv')
+setwd(path_output) # set to output path for saving results
 
 # Step 3: create candidate predictors comprising multiple variables
 E$Datum_griep_vaccin_1 <- dmy(E$Datum_griep_vaccin_1)
