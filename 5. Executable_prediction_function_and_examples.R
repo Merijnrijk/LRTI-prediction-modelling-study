@@ -1,91 +1,129 @@
 # ! Please note that this risk calculating prediction function is not yet Medical Device Regulation (MDR-)approved, 
 # and is thus not intended for medical use.
 
-# Minimal executable prediction function of final model
-predict_risk <- function(age, female_sex, cmd_1, cmd_2, pneumonia_diagnosis, hospitalisation, pneumonia_history, 
-                         malignancy, copd_asthma, dementia, influenza_vaccination, immunosuppressant, inhalation_medication,
-                         antibiotic_use, antidepressant) {
+# Set working directory
+wd <- # Insert working directory where coefficients_final_model.csv is stored
+setwd(wd)
+
+# Load full-precision coefficients
+coefs <- read.csv(
+  "coefficients_final_model.csv",
+  sep = ';',
+  stringsAsFactors = FALSE
+)
+colnames(coefs) <- c('term', 'coefficient')
+coefs$coefficient <- as.numeric(gsub(",", ".", coefs$coefficient))
+# Extract intercept and beta coefficients
+intercept <- as.numeric(
+  coefs$coefficient[coefs$term == "(Intercept)"]
+)
+beta <- as.numeric(
+  coefs$coefficient[coefs$term != "(Intercept)"]
+)
+names(beta) <- coefs$term[coefs$term != "(Intercept)"]
+stopifnot(
+  length(intercept) == 1L,
+  !anyNA(beta),
+  !anyDuplicated(names(beta))
+)
+
+# Define full-precision prediction function
+predict_risk <- function(X) {
+  X <- as.matrix(X)
   
-  # Linear predictor
-  lp <- -4.618 +
-    0.015 * age +
-    0 * female_sex -
-    0.001 * age * female_sex +
-    0.115 * cmd_1 +
-    0.344 * cmd_2 +
-    1.015 * pneumonia_diagnosis +
-    0.922 * hospitalisation -
-    0.137 * pneumonia_history +
-    0.393 * malignancy +
-    0.112 * copd_asthma +
-    0.222 * dementia +
-    0.076 * influenza_vaccination +
-    0.182 * immunosuppressant +
-    0.082 * inhalation_medication +
-    0.335 * antibiotic_use +
-    0.254 * antidepressant
+  stopifnot(
+    !is.null(colnames(X)),
+    setequal(colnames(X), names(beta))
+  )
   
-  # Predicted risk
+  X <- X[, names(beta), drop = FALSE]
+  
+  lp <- as.numeric(intercept + X %*% beta)
   plogis(lp)
 }
 
-# Test cases as described in Supplementary materials
+# Construct dataframe and model matrix for test cases
 test_cases <- data.frame(
-  age = c(76, 50, 88),
-  female_sex = c(1, 0, 1),
-  cmd_1 = c(1, 0, 0),
-  cmd_2 = c(0, 0, 1),
-  pneumonia_diagnosis = c(1, 0, 1),
-  hospitalisation = c(0, 0, 1),
-  pneumonia_history = c(1, 0, 1),
-  malignancy = c(0, 0, 0),
-  copd_asthma = c(1, 0, 0),
-  dementia = c(0, 0, 1),
-  influenza_vaccination = c(1, 0, 1),
-  immunosuppressant = c(1, 0, 0),
-  inhalation_medication = c(1, 0, 0),
-  antibiotic_use = c(0, 0, 1),
-  antidepressant = c(0, 0, 0)
+  leeftijd = c(76, 50, 88),
+  geslacht = c('V', 'M', 'V'),
+  aant_hvz = c(1, 0, 2),
+  start_icpc = c('R81', 'R78', 'R81'),
+  opname_1j_voor_episode = c(0, 0, 1),
+  pneumonie = c(1, 0, 1),
+  malign_excl_huid = c(0, 0, 0),
+  copd_astma = c(1, 0, 0),
+  dementie = c(0, 0, 1),
+  influenza_vacc = c(1, 0, 1),
+  immunosupp = c(1, 0, 0),
+  inhalatiemed = c(1, 0, 0),
+  ab_alg_voor_epi = c(0, 0, 1),
+  med_antidepr = c(0, 0, 0)
 )
+X_new <- model.matrix(
+  ~ leeftijd * factor(geslacht) +
+    factor(aant_hvz) +
+    opname_1j_voor_episode +
+    pneumonie +
+    malign_excl_huid +
+    copd_astma +
+    dementie +
+    influenza_vacc +
+    immunosupp +
+    inhalatiemed +
+    ab_alg_voor_epi +
+    med_antidepr +
+    factor(start_icpc),
+  data = test_cases
+)[, -1, drop = FALSE]
 
 # Predict risk in test cases
-test_cases$risk <- with(
-  test_cases,
-  predict_risk(
-    age = age,
-    female_sex = female_sex,
-    cmd_1 = cmd_1,
-    cmd_2 = cmd_2,
-    pneumonia_diagnosis = pneumonia_diagnosis,
-    hospitalisation = hospitalisation,
-    pneumonia_history = pneumonia_history,
-    malignancy = malignancy,
-    copd_asthma = copd_asthma,
-    dementia = dementia,
-    influenza_vaccination = influenza_vaccination,
-    immunosuppressant = immunosuppressant,
-    inhalation_medication = inhalation_medication,
-    antibiotic_use = antibiotic_use,
-    antidepressant = antidepressant
-  )
+predicted_risk <- predict_risk(X_new)
+results <- data.frame(
+  predicted_risk = predicted_risk
 )
+print(results)
+#     0.10803411
+#     0.02065934
+#     0.35171053
 
-# Calculate risk for any new patient (adjust predictor values based on patient characteristics)
-new_patient_risk <- predict_risk(
-  age = 75,
-  female_sex = 1,
-  cmd_1 = 1,
-  cmd_2 = 0,
-  pneumonia_diagnosis = 1,
-  hospitalisation = 0,
-  pneumonia_history = 0,
-  malignancy = 0,
-  copd_asthma = 1,
-  dementia = 0,
-  influenza_vaccination = 1,
-  immunosuppressant = 0,
-  inhalation_medication = 1,
-  antibiotic_use = 1,
-  antidepressant = 0
+# To calculate risk in a new patient:
+# Construct dataframe and model matrix for new case (adjust values based on patient characteristics)
+new_case <- data.frame(
+  leeftijd = c(40), # Age, range ≥40
+  geslacht = c('V'), # Sex, V for female, M for male
+  aant_hvz = c(0), # Number of cardiometabolic diseases (0 = none, 1 = one, 2 = two or more)
+  start_icpc = c('R81'), # LRTI diagnosis (R81 for pneumonia, R78 for acute bronchitis)
+  opname_1j_voor_episode = c(0), # Hospitalisation within the previous year (0 = no, 1 = yes)
+  pneumonie = c(0), # History of pneumonia (0 = no, 1 = yes)
+  malign_excl_huid = c(0), # History of malignancies (excluding skin) (0 = no, 1 = yes)
+  copd_astma = c(0), # History of COPD or asthma (0 = no, 1 = yes)
+  dementie = c(0), # History of dementia (0 = no, 1 = yes)
+  influenza_vacc = c(0), # Influenza vaccination in the previous year (0 = no, 1 = yes)
+  immunosupp = c(0), # Use of immunosuppressant drugs (0 = no, 1 = yes)
+  inhalatiemed = c(0), # Use of inhalation medication (0 = no, 1 = yes)
+  ab_alg_voor_epi = c(0), # Antibiotic prescription in previous month (0 = no, 1 = yes)
+  med_antidepr = c(0) # Use of antidepressants (0 = no, 1 = yes)
 )
-new_patient_risk
+X_new_case <- model.matrix(
+  ~ leeftijd * factor(geslacht) +
+    factor(aant_hvz) +
+    opname_1j_voor_episode +
+    pneumonie +
+    malign_excl_huid +
+    copd_astma +
+    dementie +
+    influenza_vacc +
+    immunosupp +
+    inhalatiemed +
+    ab_alg_voor_epi +
+    med_antidepr +
+    factor(start_icpc),
+  data = new_case
+)[, -1, drop = FALSE]
+
+# Predict risk in new case
+predicted_risk <- predict_risk(X_new_case)
+results <- data.frame(
+  predicted_risk = predicted_risk
+)
+print(results)
