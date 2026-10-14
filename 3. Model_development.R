@@ -320,8 +320,8 @@ internal_val$basic1 <- function(data, indices) {
 internal_val$basic2 <- function(data, indices) {
   # Create model matrices, x = bootstrap sample, y = original development cohort #
   d <- data[indices,]
-  x <- model.matrix(model1_outcome ~ rcs(leeftijd, c(42, 57, 70, 85))*factor(geslacht), data = d)[,-1]
-  y <- model.matrix(model1_outcome ~ rcs(leeftijd, c(42, 57, 70, 85))*factor(geslacht), data = data)[,-1]
+  x <- model.matrix(model1_outcome ~ rcs(leeftijd, c(43, 58, 70, 86))*factor(geslacht), data = d)[,-1]
+  y <- model.matrix(model1_outcome ~ rcs(leeftijd, c(43, 58, 70, 86))*factor(geslacht), data = data)[,-1]
   
   # Fit bootstrap model using elastic net with alpha = 0.5
   fit <- cv.glmnet(x = x, # Cross-validate to find optimal lambda (hyperparameter tuning)
@@ -560,8 +560,8 @@ internal_val$ehr1 <- function(data, indices) {
 internal_val$ehr2 <- function(data, indices) {
   # Create model matrices, x = bootstrap sample, y = original development cohort #
   d <- data[indices,]
-  x <- model.matrix(model1_outcome ~ leeftijd*factor(geslacht) + factor(aant_hvz) + opname_1j_voor_episode + pneumonie + malign_excl_huid + copd_astma + dementie + influenza_vacc + immunosupp + inhalatiemed + ab_alg_voor_epi + med_antidepr + factor(start_icpc) + factor(smokstatus) + rcs(frailty_index, c(0, 0.26, 0.46)) + rcs(aant_cont_voor_episode, c(0, 4, 11, 30)), data = d)[,-1]
-  y <- model.matrix(model1_outcome ~ leeftijd*factor(geslacht) + factor(aant_hvz) + opname_1j_voor_episode + pneumonie + malign_excl_huid + copd_astma + dementie + influenza_vacc + immunosupp + inhalatiemed + ab_alg_voor_epi + med_antidepr + factor(start_icpc) + factor(smokstatus) + rcs(frailty_index, c(0, 0.26, 0.46)) + rcs(aant_cont_voor_episode, c(0, 4, 11, 30)), data = data)[,-1]
+  x <- model.matrix(model1_outcome ~ leeftijd*factor(geslacht) + factor(aant_hvz) + opname_1j_voor_episode + pneumonie + malign_excl_huid + copd_astma + dementie + influenza_vacc + immunosupp + inhalatiemed + ab_alg_voor_epi + med_antidepr + factor(start_icpc) + factor(smokstatus) + rcs(frailty_index, c(0.0, 0.001, 0.28, 0.48)) + rcs(aant_cont_voor_episode, c(0.0, 5, 12, 33)), data = d)[,-1]
+  y <- model.matrix(model1_outcome ~ leeftijd*factor(geslacht) + factor(aant_hvz) + opname_1j_voor_episode + pneumonie + malign_excl_huid + copd_astma + dementie + influenza_vacc + immunosupp + inhalatiemed + ab_alg_voor_epi + med_antidepr + factor(start_icpc) + factor(smokstatus) + rcs(frailty_index, c(0.0, 0.001, 0.28, 0.48)) + rcs(aant_cont_voor_episode, c(0.0, 5, 12, 33)), data = data)[,-1]
   
   # Fit bootstrap model using elastic net with alpha = 0.5
   fit <- cv.glmnet(x = x, # Cross-validate to find optimal lambda (hyperparameter tuning)
@@ -618,19 +618,6 @@ boot_clinical <- boot(data = E, statistic = internal_val$clinical, R = n_bootstr
 boot_ehr1 <- boot(data = E, statistic = internal_val$ehr1, R = n_bootstrap)
 boot_ehr2 <- boot(data = E, statistic = internal_val$ehr2, R = n_bootstrap)
 
-# Explicit unit check for calculation of optimism-corrected model performance for one metric (clinical model, metric: c-statistic)
-# Known values
-auc_apparent <- apparent_performance[1,5] # 0.72806 (apparent c-statistic)
-auc_optimism <- mean(boot_clinical$t[,1]) # 0.00549 (apparent-minus-test optimism)
-auc_corrected <- internal_validation[5,1] # 0.72257 (optimism-corrected c-statistic)
-# Check
-stopifnot(
-  isTRUE(all.equal(
-    auc_apparent - auc_optimism,
-    auc_corrected
-  ))
-)
-
 # Create dataframe to store results and subtract mean optimism from apparent model performance to obtain optimism-corrected performance
 internal_validation <- data.frame(matrix(nrow = 7, ncol = 4))
 colnames(internal_validation) <- c('auc', 'rsq', 'intercept', 'slope')
@@ -664,6 +651,24 @@ internal_validation[7,2] <- apparent_performance[4,7] - mean(boot_ehr2$t[,2])
 internal_validation[7,3] <- apparent_performance[5,7] - mean(boot_ehr2$t[,3])
 internal_validation[7,4] <- apparent_performance[8,7] - mean(boot_ehr2$t[,4])
 write.csv(internal_validation, 'internal_validation.csv')
+
+# Explicit unit check for calculation of optimism-corrected model performance for one metric (clinical model, metric: c-statistic)
+# Known values
+auc_apparent <- apparent_performance[1,5] # 0.72806 (apparent c-statistic)
+auc_optimism <- mean(boot_clinical$t[,1]) # 0.00549 (apparent-minus-test optimism)
+auc_corrected <- internal_validation[5,1] # 0.72257 (optimism-corrected c-statistic)
+# Check
+stopifnot(
+  isTRUE(all.equal(
+    auc_apparent - auc_optimism,
+    auc_corrected
+  ))
+)
+
+
+# Export coefficients of final model to be used to reconstruct prediction function
+coef_final <- as.matrix(coef(fit$clinical, s = fit$clinical$lambda.min))
+write.csv(coef_final, 'coefficients_final_model.csv')
 
 # Step 10: sensitivity analysis. Outcome: respiratory tract or cardiovasculatory related hospitalisation or mortality within 30 days
 # Create table to store predictions of original model and outcome for sensitivity analysis (i.e. cardiorespiratory hospitalisation)
@@ -734,7 +739,7 @@ label_geslacht <- c('M' = 'Male',
                     'V' = 'Female')
 ggplot(data = pred_cvd) +
   geom_smooth(mapping = aes(x = leeftijd, y = pred, color = factor(aant_hvz)), method = 'loess') +
-  scale_color_manual(values = c('cadetblue', 'coral', 'firebrick3'), labels = c('0', '1', '\u2265 2', '1', '0'), name = 'Number of CVD') +
+  scale_color_manual(values = c('cadetblue', 'coral', 'firebrick3'), labels = c('0', '1', '\u2265 2'), name = 'Number of CVD') +
   facet_wrap(~ geslacht, labeller = as_labeller(label_geslacht)) +
   xlab('Age (years)') +
   ylab('Predicted probability')
@@ -825,7 +830,3 @@ REML_year$intercept <- rma(yi = int_ext_year$intercept, sei = int_ext_year$SE_in
 REML_year$intercept
 forest(REML_year$intercept, xlim = c(-2.25, 1.75), xlab = 'Calibration intercept', refline = REML_year$intercept$b, at = c(-0.5, -0.25, 0, 0.25, 0.5), ilab = cbind(int_ext_year$n, int_ext_year$outcomes), ilab.xpos = c(-1.25, -0.8), header = c('Validation year', 'Intercept (95% CI)'), showweights = T, psize = 1, col = 'coral3')
 text(c(-1.25, -0.8), REML_year$intercept$k+2, c('n', 'Events'), cex = 1, font = 2)
-
-# Step 13: Export coefficients of final model to be used to reconstruct prediction function
-coef_final <- as.matrix(coef(fit$clinical, s = fit$clinical$lambda.min))
-write.csv(coef_final, 'coefficients_final_model.csv')
