@@ -113,7 +113,7 @@ ggplot(E) +
   ylab('Number of patients') +
   theme_economist() +
   theme(axis.title.y = element_text(margin = margin(r = 20)), axis.title.x = element_text(margin = margin(t = 20)))
-ggsave('Export R/Time_to_outcome.tiff')
+ggsave('Time_to_outcome.tiff')
 quantile(E$time_to_outcome, c(0.25, 0.5, 0.75), na.rm = T)
 
 # Step 7: Fit models using elastic net for regularization
@@ -174,19 +174,19 @@ for (i in 1:7) {
 
 ## Coefficients of the models ##
 coef_basic1 <- as.matrix(coef(fit$basic1, s = fit$basic1$lambda.min))
-write.csv(coef_basic1, 'Export R/coefficients_basic1_model.csv')
+write.csv(coef_basic1, 'coefficients_basic1_model.csv')
 coef_basic2 <- as.matrix(coef(fit$basic2, s = fit$basic2$lambda.min))
-write.csv(coef_basic2, 'Export R/coefficients_basic2_model.csv')
+write.csv(coef_basic2, 'coefficients_basic2_model.csv')
 coef_cvd1 <- as.matrix(coef(fit$cvd1, s = fit$cvd1$lambda.min))
-write.csv(coef_cvd1, 'Export R/coefficients_cvd1_model.csv')
+write.csv(coef_cvd1, 'coefficients_cvd1_model.csv')
 coef_cvd2 <- as.matrix(coef(fit$cvd2, s = fit$cvd2$lambda.min))
-write.csv(coef_cvd2, 'Export R/coefficients_cvd2_model.csv')
+write.csv(coef_cvd2, 'coefficients_cvd2_model.csv')
 coef_clinical <- as.matrix(coef(fit$clinical, s = fit$clinical$lambda.min))
-write.csv(coef_clinical, 'Export R/coefficients_clinical_model.csv')
+write.csv(coef_clinical, 'coefficients_clinical_model.csv')
 coef_ehr1 <- as.matrix(coef(fit$ehr1, s = fit$ehr1$lambda.min))
-write.csv(coef_ehr1, 'Export R/coefficients_ehr1_model.csv')
+write.csv(coef_ehr1, 'coefficients_ehr1_model.csv')
 coef_ehr2 <- as.matrix(coef(fit$ehr2, s = fit$ehr2$lambda.min))
-write.csv(coef_ehr2, 'Export R/coefficients_ehr2_model.csv')
+write.csv(coef_ehr2, 'coefficients_ehr2_model.csv')
 rm(coef_basic1, coef_basic2, coef_cvd1, coef_cvd2, coef_clinical, coef_ehr1, coef_ehr2)
 
 # Step 8: Make predictons based on fitted models and calculate apparent performance
@@ -216,7 +216,7 @@ for (i in c('basic1', 'basic2', 'cvd1', 'cvd2', 'clinical', 'ehr1', 'ehr2')) {
 rm(perf, i)
 
 # Export
-write.table(apparent_performance, 'Export R/apparent_performance.csv')
+write.table(apparent_performance, 'apparent_performance.csv')
 val.prob.ci.2(table_pred$basic1, table_pred$model1_outcome, xlim = c(0, 0.7), ylim = c(0, 0.7), line.bins = 0.65, dist.label = 0.02, dist.label2 = 0.02, legendloc = F, dostats = T, statloc = c(0.47, 0.075), lwd.smooth = 2, xlab = 'Estimated probability')
 val.prob.ci.2(table_pred$basic2, table_pred$model1_outcome, xlim = c(0, 0.7), ylim = c(0, 0.7), line.bins = 0.65, dist.label = 0.02, dist.label2 = 0.02, legendloc = F, dostats = T, statloc = c(0.47, 0.075), lwd.smooth = 2, xlab = 'Estimated probability')
 val.prob.ci.2(table_pred$cvd1, table_pred$model1_outcome, xlim = c(0, 0.7), ylim = c(0, 0.7), line.bins = 0.65, dist.label = 0.02, dist.label2 = 0.02, legendloc = F, dostats = T, statloc = c(0.47, 0.075), lwd.smooth = 2, xlab = 'Estimated probability')
@@ -236,7 +236,7 @@ for (i in c('basic1', 'basic2', 'cvd1', 'cvd2', 'clinical', 'ehr1', 'ehr2')) {
 }
 
 # Save table with range of predicted risks
-write.table(range_risks, 'Export R/range_risks_apparent.csv')
+write.table(range_risks, 'range_risks_apparent.csv')
 
 ## Create histogram of predicted risks of clinical model
 ggplot(table_pred) +
@@ -244,7 +244,7 @@ ggplot(table_pred) +
   xlab('Predicted risk') +
   ylab('LRTI patients (n)') +
   theme_economist()
-ggsave('Export R/Predicted_risks_clinical.tiff')
+ggsave('Predicted_risks_clinical.tiff')
 
 ## cohort of patients with estimated probability >0.2
 E20 <- filter(table_pred, clinical >= 0.2)
@@ -663,7 +663,7 @@ internal_validation[7,1] <- apparent_performance[1,7] - mean(boot_ehr2$t[,1])
 internal_validation[7,2] <- apparent_performance[4,7] - mean(boot_ehr2$t[,2])
 internal_validation[7,3] <- apparent_performance[5,7] - mean(boot_ehr2$t[,3])
 internal_validation[7,4] <- apparent_performance[8,7] - mean(boot_ehr2$t[,4])
-write.csv(internal_validation, 'Export R/internal_validation.csv')
+write.csv(internal_validation, 'internal_validation.csv')
 
 # Step 10: sensitivity analysis. Outcome: respiratory tract or cardiovasculatory related hospitalisation or mortality within 30 days
 # Create table to store predictions of original model and outcome for sensitivity analysis (i.e. cardiorespiratory hospitalisation)
@@ -686,7 +686,7 @@ apparent_performance_sens[5:7, 1] <- perf$Calibration$Intercept
 apparent_performance_sens[8:10, 1] <- perf$Calibration$Slope
 
 # Export
-write.table(apparent_performance_sens, 'Export R/apparent_performance_sens.csv')
+write.table(apparent_performance_sens, 'apparent_performance_sens.csv')
 val.prob.ci.2(table_pred_sens$prediction, table_pred_sens$outcome_sens, xlim = c(0, 0.7), ylim = c(0, 0.7), line.bins = 0.67, dist.label2 = 0.02, legendloc = F, dostats = T)
 
 # Step 11: assess incremental predictive value of CVD
@@ -701,7 +701,7 @@ roc_ehr2 <- roc(table_pred$model1_outcome, table_pred$ehr2)
 roc.test(roc_basic1, roc_cvd1, alternative = 'two.sided', method = 'bootstrap')
 
 # plot ROC curves of all models #
-tiff('Export R/AUROC_incremental_all.tiff', width = 800, height = 600)
+tiff('AUROC_incremental_all.tiff', width = 800, height = 600)
 par(pty='s')
 plot.roc(roc_basic1, main = 'ROC curve - Apparent Performance', col = 'steelblue', legacy.axes = T)
 plot.roc(roc_basic2, main = 'ROC curve - Apparent Performance', col = 'steelblue1', legacy.axes = T)
@@ -714,7 +714,7 @@ legend('bottomright', c('basic 1 model (auc 0.61)', 'basic 2 model (auc 0.62)', 
 dev.off()
 
 # plot ROC curves of basis/cmd/clinical model #
-tiff('Export R/AUROC_incremental_cvd.tiff', width = 800, height = 600)
+tiff('AUROC_incremental_cvd.tiff', width = 800, height = 600)
 par(pty='s')
 plot.roc(roc_basic1, main = 'ROC curve - Apparent Performance', col = 'orange', legacy.axes = T)
 plot.roc(roc_cvd1, col = 'cadetblue', add = T)
@@ -738,7 +738,7 @@ ggplot(data = pred_cvd) +
   facet_wrap(~ geslacht, labeller = as_labeller(label_geslacht)) +
   xlab('Age (years)') +
   ylab('Predicted probability')
-ggsave('Export R/prediction_plot.tiff')
+ggsave('prediction_plot.tiff')
 
 # Step 12: Internal-external cross-validation based on year (2016 - 2019)
 ## Create table for results
@@ -792,7 +792,7 @@ for (i in c(2016, 2017, 2018, 2019)) {
   int_ext_year[as.character(i),1] <- i
 }
 rm(test_data, train_data, x_test, x_train, i)
-write.csv(int_ext_year, 'Export R/internal-external_year.csv')
+write.csv(int_ext_year, 'internal-external_year.csv')
 
 # Calculate SE from CI of AUC, slope, and intercept
 for (i in 1:4) {
@@ -828,4 +828,4 @@ text(c(-1.25, -0.8), REML_year$intercept$k+2, c('n', 'Events'), cex = 1, font = 
 
 # Step 13: Export coefficients of final model to be used to reconstruct prediction function
 coef_final <- as.matrix(coef(fit$clinical, s = fit$clinical$lambda.min))
-write.csv(coef_final, 'Export R/coefficients_final_model.csv')
+write.csv(coef_final, 'coefficients_final_model.csv')
