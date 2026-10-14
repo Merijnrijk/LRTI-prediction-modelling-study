@@ -1,6 +1,9 @@
-## Loading data
+## Set paths for input and output data
+path_input <- # Insert path where input data is stored
+path_output <- # insert path where output will be stored
 
-setwd('H:/Merijn/Extern cohort (JHN)/ELEMENT_PM_1')
+## Loading data
+setwd(path_input)
 E <- read.csv('ELEMENT_PM1_dataset.csv', header = T, sep = ',') # Load cohort file
 
 ## Loading packages
@@ -349,4 +352,5 @@ E <- left_join(E, icd, by = c('rin', 'indexdate'), relationship = 'one-to-one')
 rm(icd) # remove unecessary object
 
 # save dataframe
-write.csv(E, 'H:/Merijn/Extern cohort (JHN)/ELEMENT_PM_1/ELEMENT_PM1_dataset.csv')
+setwd(path_output)
+write.csv(E, 'ELEMENT_PM1_dataset.csv')
