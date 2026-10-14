@@ -816,4 +816,4 @@ text(c(-1.25, -0.8), REML_year$intercept$k+2, c('n', 'Events'), cex = 1, font = 
 
 # Step 13: Export coefficients of final model to be used to reconstruct prediction function
 coef_final <- as.matrix(coef(fit$clinical, s = fit$clinical$lambda.min))
-write.csv(coef_clinical, 'Export R/coefficients_final_model.csv')
+write.csv(coef_final, 'Export R/coefficients_final_model.csv')
