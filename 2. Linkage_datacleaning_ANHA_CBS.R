@@ -229,4 +229,4 @@ anha <- anha %>%
 
 # save dataframe
 setwd(path_output)
-write.csv(anha, 'External_validation_ cohort.csv')
+write.csv(anha, 'External_validation_cohort.csv')
