@@ -1,9 +1,14 @@
 ## First run development script up to model development (step 7) ##
 
+## Set paths for input and output data
+path_input <- # Insert path where input data is stored
+path_output <- # insert path where output will be stored
+
 ## Load validation cohort
 library(tidyverse)
-setwd('H:/Merijn/Extern cohort (JHN)/ELEMENT_PM_1')
+setwd(path_input)
 anha <- read.csv('External_validation_ cohort.csv')
+setwd(path_output) # set to output path for saving results
 
 ## Some last datacleaning
 anha$start_epi <- ymd(anha$start_epi)
@@ -66,13 +71,13 @@ ggplot(anha) +
   ylab('Number of patients') +
   theme_economist() +
   theme(axis.title.y = element_text(margin = margin(r = 20)), axis.title.x = element_text(margin = margin(t = 20)))
-ggsave('H:/Merijn/Extern cohort (JHN)/ELEMENT_PM_1/Export R/Time_to_outcome_validation_cohort.tiff')
+ggsave('Time_to_outcome_validation_cohort.tiff')
 tto_val <- data.frame(matrix(ncol = 3, nrow = 1))
 colnames(tto_val) <- c('median', 'q25', 'q75')
 tto_val[[1]] <- median(anha$tto, na.rm = T)
 tto_val[[2]] <- quantile(anha$tto, probs = 0.25, na.rm = T)
 tto_val[[3]] <- quantile(anha$tto, probs = 0.75, na.rm = T)
-write.csv(tto_val, 'H:/Merijn/Extern cohort (JHN)/ELEMENT_PM_1/Export R/time_to_outcome_validation.csv')
+write.csv(tto_val, 'time_to_outcome_validation.csv')
 
 ## Make predictions in validation cohort
 # Create table to store predictions
@@ -123,7 +128,7 @@ ggplot(pred_val) +
   xlim(0, 0.65) +
   ylim(0, 900) +
   theme_few()
-ggsave('Export R/Predicted_risks_external_validation.tiff')
+ggsave('Predicted_risks_external_validation.tiff')
 ggplot(pred_val) +
   geom_histogram(mapping = aes(x = basic), colour = 'coral4', fill = 'coral3', binwidth = 0.01, center = 0) +
   xlab('Predicted risk') +
@@ -131,7 +136,7 @@ ggplot(pred_val) +
   xlim(0, 0.65) +
   ylim(0, 900) +
   theme_few()
-ggsave('Export R/Predicted_risks_external_validation_basic.tiff')
+ggsave('Predicted_risks_external_validation_basic.tiff')
 
 ## Performance measures per subgroup
 pred_val_pneumonia <- filter(pred_val, start_icpc == 'R81')
@@ -197,7 +202,6 @@ mean(pred_val$clinical)
 mean(pred_val$recal_risk)
 
 ## Save tables
-setwd('H:/Merijn/Extern cohort (JHN)/ELEMENT_PM_1/Export R')
 write.csv(ext_val, 'external_validation_performance.csv')
 write.csv(ext_val_range, 'external_validation_range_risks.csv')
 write.csv(ext_val_hosp, 'external_validation_performance_hosp.csv')
@@ -236,7 +240,7 @@ dca <- dcurves::dca(
   ) +
   theme_few()
 dca
-ggsave('H:/Merijn/Extern cohort (JHN)/NLP add-on study/Export R/DCA_clinical.tiff')
+ggsave('DCA_clinical.tiff')
 # Additional data for clinical interpretation of DCA based on risk thresholds 10%-20%-30%-40%-50%
 # Proportion of patients labelled as high-risk
 sum(pred_val$clinical>=0.10)/6284
