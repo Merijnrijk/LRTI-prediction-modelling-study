@@ -814,6 +814,6 @@ REML_year$intercept
 forest(REML_year$intercept, xlim = c(-2.25, 1.75), xlab = 'Calibration intercept', refline = REML_year$intercept$b, at = c(-0.5, -0.25, 0, 0.25, 0.5), ilab = cbind(int_ext_year$n, int_ext_year$outcomes), ilab.xpos = c(-1.25, -0.8), header = c('Validation year', 'Intercept (95% CI)'), showweights = T, psize = 1, col = 'coral3')
 text(c(-1.25, -0.8), REML_year$intercept$k+2, c('n', 'Events'), cex = 1, font = 2)
 
-# Export coefficients of final model to be used to reconstruct prediction function
+# Step 13: Export coefficients of final model to be used to reconstruct prediction function
 coef_final <- as.matrix(coef(fit$clinical, s = fit$clinical$lambda.min))
 write.csv(coef_clinical, 'Export R/coefficients_final_model.csv')
