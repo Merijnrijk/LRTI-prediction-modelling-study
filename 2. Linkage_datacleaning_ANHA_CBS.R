@@ -1,6 +1,9 @@
-## Loading data
+## Set paths for input and output data
+path_input <- # Insert path where input data is stored
+path_output <- # insert path where output will be stored
 
-setwd('H:/Merijn/ANHA')
+## Loading data
+setwd(path_input)
 anha <- read.csv('9199_UMCU_ELEMENT_CBS9199_ANHA_20250725_ttpCBKV1.csv', header = T, sep = ';')
 
 ## Loading packages
@@ -225,4 +228,5 @@ anha <- anha %>%
     ))
 
 # save dataframe
-write.csv(anha, 'H:/Merijn/Extern cohort (JHN)/ELEMENT_PM_1/External_validation_ cohort.csv')
+setwd(path_output)
+write.csv(anha, 'External_validation_ cohort.csv')
