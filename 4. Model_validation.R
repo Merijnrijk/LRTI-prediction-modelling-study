@@ -93,7 +93,7 @@ x_vb <- x1 <- model.matrix(outcome ~ leeftijd*factor(geslacht), data = anha)[,-1
 # Formal check whether model matrices (development and validation cohort) are identical
 dim(x[[5]])
 dim(x_v)
-identical(colnames(x[[5]]), colnames(x_v)) # True
+stopifnot(identical(colnames(x[[5]]), colnames(x_v)))
 # Store predictions
 pred_val[,2] <- as.numeric(predict(fit[[5]], newx = x_v, type = 'response', s = 'lambda.min'))
 pred_val[,1] <- as.numeric(predict(fit[[1]], newx = x_vb, type = 'response', s = 'lambda.min'))
