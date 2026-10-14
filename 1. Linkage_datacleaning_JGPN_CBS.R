@@ -289,7 +289,7 @@ E <- E %>%
     med_laba_lama = ifelse(!is.na(med_laba_lama) & med_laba_lama < start_epi, 1, 0),
     med_ics = ifelse(!is.na(med_ics) & med_ics < start_epi, 1, 0),
     med_ics_laba = ifelse(!is.na(med_ics_laba) & med_ics_laba < start_epi, 1, 0),
-    med_ics_laba_lama = ifelse(!is.na(med_ics_laba_lama) & med_ics_laba_lama < start_epi, 1, 0),
+    med_ics_laba_lama = ifelse(!is.na(med_ics_laba_lama) & med_ics_laba_lama < start_epi, 1, 0)
   )
 E <- E %>%
   mutate(
@@ -345,7 +345,6 @@ icd <- icd %>%
   mutate(
     ICD_J = as.integer(
       if_any(5:80, ~ grepl("^[IJ]", .x)))) # Create variable for any ICD code that starts with J or I
-table(icd$ICD_J == 1 & icd$model1_outcome_hosp == 1) # Number of admssions with cardiorespiratory hospitalisation or all-cause mortality
 
 ## Merge ICD codes with cohort/E files ##
 E <- left_join(E, icd, by = c('rin', 'indexdate'), relationship = 'one-to-one')
