@@ -606,6 +606,19 @@ boot_clinical <- boot(data = E, statistic = internal_val$clinical, R = n_bootstr
 boot_ehr1 <- boot(data = E, statistic = internal_val$ehr1, R = n_bootstrap)
 boot_ehr2 <- boot(data = E, statistic = internal_val$ehr2, R = n_bootstrap)
 
+# Explicit unit check for calculation of optimism-corrected model performance for one metric (clinical model, metric: c-statistic)
+# Known values
+auc_apparent <- apparent_performance[1,5] # 0.72806 (apparent c-statistic)
+auc_optimism <- mean(boot_clinical$t[,1]) # 0.00549 (apparent-minus-test optimism)
+auc_corrected <- internal_validation[5,1] # 0.72257 (optimism-corrected c-statistic)
+# Check
+stopifnot(
+  isTRUE(all.equal(
+    auc_apparent - auc_optimism,
+    auc_corrected
+  ))
+)
+
 # Create dataframe to store results and subtract mean optimism from apparent model performance to obtain optimism-corrected performance
 internal_validation <- data.frame(matrix(nrow = 7, ncol = 4))
 colnames(internal_validation) <- c('auc', 'rsq', 'intercept', 'slope')
