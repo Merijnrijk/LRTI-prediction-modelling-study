@@ -45,7 +45,7 @@ path_output <- # insert path where output will be stored
 
 # Step 2: load data file
 setwd(path_input)
-E <- read.csv('ELEMENT_PM1_dataset.csv')
+E <- read.csv('Development_cohort_linked.csv')
 setwd(path_output) # set to output path for saving results
 
 # Step 3: create candidate predictors comprising multiple variables
