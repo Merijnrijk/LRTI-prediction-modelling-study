@@ -7,7 +7,7 @@ path_output <- # insert path where output will be stored
 ## Load validation cohort
 library(tidyverse)
 setwd(path_input)
-anha <- read.csv('External_validation_ cohort.csv')
+anha <- read.csv('Validation_cohort_linked.csv')
 setwd(path_output) # set to output path for saving results
 
 ## Some last datacleaning
