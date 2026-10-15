@@ -3,8 +3,9 @@ path_input <- # Insert path where input data is stored
 path_output <- # insert path where output will be stored
 
 ## Loading data
+# Replace 'Development_cohort.csv' with name of development cohort file
 setwd(path_input)
-E <- read.csv('ELEMENT_PM1_dataset.csv', header = T, sep = ',') # Load cohort file
+E <- read.csv('Development_cohort.csv', header = T, sep = ',') # Load cohort file
 
 ## Loading packages
 library(tidyverse)
@@ -352,4 +353,4 @@ rm(icd) # remove unecessary object
 
 # save dataframe
 setwd(path_output)
-write.csv(E, 'ELEMENT_PM1_dataset.csv')
+write.csv(E, 'Development_cohort_linked.csv')
