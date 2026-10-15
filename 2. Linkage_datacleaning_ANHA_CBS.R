@@ -3,8 +3,9 @@ path_input <- # Insert path where input data is stored
 path_output <- # insert path where output will be stored
 
 ## Loading data
+# Replace 'Validation_cohort.csv' with name of development cohort file
 setwd(path_input)
-anha <- read.csv('9199_UMCU_ELEMENT_CBS9199_ANHA_20250725_ttpCBKV1.csv', header = T, sep = ';')
+anha <- read.csv('Validation_cohort.csv', header = T, sep = ';')
 
 ## Loading packages
 library(tidyverse)
@@ -230,4 +231,4 @@ anha <- anha %>%
 
 # save dataframe
 setwd(path_output)
-write.csv(anha, 'External_validation_cohort.csv')
+write.csv(anha, 'Validation_cohort_linked.csv')
