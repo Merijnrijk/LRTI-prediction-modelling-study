@@ -1,5 +1,10 @@
-# ! Please note that this risk calculating prediction function is not yet Medical Device Regulation (MDR-)approved, 
+# ! PLEASE NOTE that this risk calculating prediction function is not yet Medical Device Regulation (MDR-)approved, 
 # and is thus not intended for medical use.
+
+# This script can be used to calculate risk of 30-day all-cause hospitalisation or mortality in patients ≥40 years presenting to general practice with LRTI
+# It constructs the final model at full-precision and calculates risk in the three worked cases included in the SUpplementary materials
+# For predictor levels: see Tablse S8 (Supplementary materials)
+# Lambda value used for the final model: lambda.min
 
 # Set working directory
 wd <- # Insert working directory where coefficients_final_model.csv is stored
