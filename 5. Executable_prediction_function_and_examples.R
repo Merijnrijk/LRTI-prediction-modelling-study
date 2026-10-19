@@ -92,7 +92,14 @@ print(results)
 #     0.35171053
 
 # To calculate risk in a new patient:
-# Construct dataframe and model matrix for new case (adjust values based on patient characteristics)
+# Define factor levels
+factor_levels <- list(
+  geslacht   = c('M', 'V'),
+  aant_hvz   = c('0', '1', '2'),
+  start_icpc = c('R78', 'R81')
+)
+
+# Construct dataframe for new case (adjust values based on patient characteristics)
 new_case <- data.frame(
   leeftijd = c(40), # Age, range ≥40
   geslacht = c('V'), # Sex, V for female, M for male
@@ -109,6 +116,31 @@ new_case <- data.frame(
   ab_alg_voor_epi = c(0), # Antibiotic prescription in previous month (0 = no, 1 = yes)
   med_antidepr = c(0) # Use of antidepressants (0 = no, 1 = yes)
 )
+
+# Explicitly assign the original training factor levels
+new_case$geslacht <- factor(
+  new_case$geslacht,
+  levels = factor_levels$geslacht
+)
+
+new_case$aant_hvz <- factor(
+  as.character(new_case$aant_hvz),
+  levels = factor_levels$aant_hvz
+)
+
+new_case$start_icpc <- factor(
+  new_case$start_icpc,
+  levels = factor_levels$start_icpc
+)
+
+# Stop if any categorical value is not recognised
+stopifnot(
+  !anyNA(new_case$geslacht),
+  !anyNA(new_case$aant_hvz),
+  !anyNA(new_case$start_icpc)
+)
+
+# Construct model matrix
 X_new_case <- model.matrix(
   ~ leeftijd * factor(geslacht) +
     factor(aant_hvz) +
@@ -125,6 +157,13 @@ X_new_case <- model.matrix(
     factor(start_icpc),
   data = new_case
 )[, -1, drop = FALSE]
+
+# Check for missing or non-finite predictor values
+stopifnot(
+  nrow(X_new_case) == 1L,
+  !anyNA(X_new_case),
+  all(is.finite(X_new_case))
+)
 
 # Predict risk in new case
 predicted_risk <- predict_risk(X_new_case)
