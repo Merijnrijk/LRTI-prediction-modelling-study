@@ -118,7 +118,7 @@ X_new <- make_model_matrix(test_cases)
 predicted_risk <- predict_risk(X_new)
 
 # Automated test: predicted risks within tolerance of risk predicted by fitted model object (see model validation script)
-expected_risk <- c(0.1082, 0.0205, 0.3523)
+expected_risk <- c(0.1084, 0.0206, 0.3521)
 tolerance <- 0.001
 stopifnot(
   length(predicted_risk) == length(expected_risk),
