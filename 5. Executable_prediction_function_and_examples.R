@@ -116,6 +116,17 @@ test_cases <- data.frame(
 # Predict risk in test cases
 X_new <- make_model_matrix(test_cases)
 predicted_risk <- predict_risk(X_new)
+
+# Automated test: predicted risks within tolerance of risk predicted by fitted model object (see model validation script)
+expected_risk <- c(0.1082, 0.0205, 0.3523)
+tolerance <- 0.001
+stopifnot(
+  length(predicted_risk) == length(expected_risk),
+  all(abs(predicted_risk - expected_risk) <= tolerance)
+)
+message("All predicted risks are within the specified tolerance.")
+
+# Print results
 results <- data.frame(
   predicted_risk = predicted_risk
 )
