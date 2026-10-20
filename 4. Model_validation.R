@@ -352,5 +352,5 @@ test_cases <- data.frame(
 
 # Predict risk in test cases
 X_new <- make_model_matrix(test_cases)
-predict(fit$clinical, newx = X_new, type = 'response', s = 'lambda.min')
+predict(fit[[5]], newx = X_new, type = 'response', s = 'lambda.min')
 # 0.1084, 0.0206, 0.3521
