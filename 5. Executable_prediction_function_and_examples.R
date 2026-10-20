@@ -198,8 +198,7 @@ stopifnot(
         as.numeric(test_grid$geslacht == "V"))
 )
 
-# Test 4: reference and non-reference coding for
-# cardiometabolic disease count
+# Test 4: reference and non-reference coding for number of cardiometabolic diseases
 stopifnot(
   all(X_test[, "factor(aant_hvz)1"] ==
         as.numeric(test_grid$aant_hvz == "1")),
@@ -207,15 +206,13 @@ stopifnot(
         as.numeric(test_grid$aant_hvz == "2"))
 )
 
-# Test 5: reference and non-reference coding for ICPC diagnosis
+# Test 5: reference and non-reference coding for LRTI diagnosis code
 stopifnot(
   all(X_test[, "factor(start_icpc)R81"] ==
         as.numeric(test_grid$start_icpc == "R81"))
 )
 
 # Test 6: age-by-sex interaction
-# Under treatment coding, the interaction equals age for women
-# and zero for men.
 stopifnot(
   all(
     X_test[, "leeftijd:factor(geslacht)V"] ==
