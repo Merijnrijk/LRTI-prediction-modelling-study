@@ -282,3 +282,75 @@ net_benefit_table <- dca2 %>%
     names_from = variable,
     values_from = net_benefit
   )
+
+# Predict risk with original fitted model for worked cases as described in Supplementary materials
+# Store the original model formula
+form <- ~ leeftijd * factor(geslacht) +
+  factor(aant_hvz) +
+  opname_1j_voor_episode +
+  pneumonie +
+  malign_excl_huid +
+  copd_astma +
+  dementie +
+  influenza_vacc +
+  immunosupp +
+  inhalatiemed +
+  ab_alg_voor_epi +
+  med_antidepr +
+  factor(start_icpc)
+
+# Define factor levels
+factor_levels <- list(
+  geslacht   = c('M', 'V'),
+  aant_hvz   = c('0', '1', '2'),
+  start_icpc = c('R78', 'R81')
+)
+
+# Specify the original training levels for the factor terms
+xlev <- list(
+  `factor(geslacht)` = factor_levels$geslacht,
+  `factor(aant_hvz)` = factor_levels$aant_hvz,
+  `factor(start_icpc)` = factor_levels$start_icpc
+)
+
+# Function to construct a model matrix
+make_model_matrix <- function(data) {
+  mf <- model.frame(
+    form,
+    data = data,
+    xlev = xlev
+  )
+  
+  X <- model.matrix(form, data = mf)
+  
+  # Remove intercept; it is supplied separately by predict_risk()
+  X <- X[, colnames(X) != "(Intercept)", drop = FALSE]
+  
+  # Confirm that all expected predictors are present
+  stopifnot(identical(colnames(X), names(beta)))
+  
+  X
+}
+
+# Construct dataframe and model matrix for test cases
+test_cases <- data.frame(
+  leeftijd = c(76, 50, 88),
+  geslacht = c('V', 'M', 'V'),
+  aant_hvz = c(1, 0, 2),
+  start_icpc = c('R81', 'R78', 'R81'),
+  opname_1j_voor_episode = c(0, 0, 1),
+  pneumonie = c(1, 0, 1),
+  malign_excl_huid = c(0, 0, 0),
+  copd_astma = c(1, 0, 0),
+  dementie = c(0, 0, 1),
+  influenza_vacc = c(1, 0, 1),
+  immunosupp = c(1, 0, 0),
+  inhalatiemed = c(1, 0, 0),
+  ab_alg_voor_epi = c(0, 0, 1),
+  med_antidepr = c(0, 0, 0)
+)
+
+# Predict risk in test cases
+X_new <- make_model_matrix(test_cases)
+predict(fit$clinical, newx = X_new, type = 'response', s = 'lambda.min')
+# 0.1084, 0.0206, 0.3521
