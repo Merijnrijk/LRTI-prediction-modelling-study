@@ -709,9 +709,10 @@ stopifnot(
 )
 
 
-# Export coefficients of final model to be used to reconstruct prediction function
+# Export coefficients of final model to be used to reconstruct prediction function and extract lambda.min value
 coef_final <- as.matrix(coef(fit$clinical, s = fit$clinical$lambda.min))
 write.csv(coef_final, 'coefficients_final_model.csv')
+fit$clinical$lambda.min #0.000847
 
 # Step 10: sensitivity analysis. Outcome: respiratory tract or cardiovasculatory related hospitalisation or mortality within 30 days
 # Create table to store predictions of original model and outcome for sensitivity analysis (i.e. cardiorespiratory hospitalisation)
