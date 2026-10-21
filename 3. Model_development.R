@@ -120,11 +120,11 @@ quantile(E$time_to_outcome, c(0.25, 0.5, 0.75), na.rm = T)
 # Step 7: Fit models using elastic net for regularization
 #- x1: basic 1, with age as linear
 #- x2: basic 2, with age as RCS
-#- x3: CVD 1, with age as linear and CVD as cumulative
-#- x4: CVD 2, with age as linear and CVD as separate
-#- x5: clinical, with age as linear and CVD as cumulative
-#- x6: EHR 1, with age as linear, CVD as cumulative, and frailty index and number of consultations as linear
-#- x7: EHR 2, with age as linear, CVD as cumulative, and frailty index and number of consultations as RCS
+#- x3: CVD 1, with age as linear and CMD as cumulative
+#- x4: CVD 2, with age as linear and CMD as separate
+#- x5: clinical, with age as linear and CMD as cumulative
+#- x6: EHR 1, with age as linear, CMD as cumulative, and frailty index and number of consultations as linear
+#- x7: EHR 2, with age as linear, CMD as cumulative, and frailty index and number of consultations as RCS
 
 # Assess relevant quantiles of age in the development cohort
 quantile(E$leeftijd, c(0.05, 0.35, 0.65, 0.95))
