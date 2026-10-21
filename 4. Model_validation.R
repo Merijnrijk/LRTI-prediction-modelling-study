@@ -332,7 +332,7 @@ make_model_matrix <- function(data) {
   X
 }
 
-# Construct dataframe and model matrix for test cases
+# Construct dataframe and model matrix for worked cases
 test_cases <- data.frame(
   leeftijd = c(76, 50, 88),
   geslacht = c('V', 'M', 'V'),
@@ -349,8 +349,8 @@ test_cases <- data.frame(
   ab_alg_voor_epi = c(0, 0, 1),
   med_antidepr = c(0, 0, 0)
 )
-
-# Predict risk in test cases
 X_new <- make_model_matrix(test_cases)
+
+# Predict risk in worked cases
 predict(fit[[5]], newx = X_new, type = 'response', s = 'lambda.min')
-# 0.1084, 0.0206, 0.3521
+# c(0.1084, 0.0206, 0.3521)
