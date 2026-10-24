@@ -314,7 +314,7 @@ internal_val$basic1 <- function(data, indices) {
   rsq <- rsq_b - rsq_o
   intercept <- intercept_b - intercept_o
   slope <- slope_b - slope_o
-  return(c(auc, rsq, intercept, slope))
+  return(c(auc, rsq, intercept, slope, auc_b, intercept_b, slope_b))
 }
 
 # Write function: basic2 model
@@ -362,7 +362,7 @@ internal_val$basic2 <- function(data, indices) {
   rsq <- rsq_b - rsq_o
   intercept <- intercept_b - intercept_o
   slope <- slope_b - slope_o
-  return(c(auc, rsq, intercept, slope))
+  return(c(auc, rsq, intercept, slope, auc_b, intercept_b, slope_b))
 }
 
 # Write function: cvd1 model
@@ -410,7 +410,7 @@ internal_val$cvd1 <- function(data, indices) {
   rsq <- rsq_b - rsq_o
   intercept <- intercept_b - intercept_o
   slope <- slope_b - slope_o
-  return(c(auc, rsq, intercept, slope))
+  return(c(auc, rsq, intercept, slope, auc_b, intercept_b, slope_b))
 }
 
 # Write function: cvd2 model
@@ -458,7 +458,7 @@ internal_val$cvd2 <- function(data, indices) {
   rsq <- rsq_b - rsq_o
   intercept <- intercept_b - intercept_o
   slope <- slope_b - slope_o
-  return(c(auc, rsq, intercept, slope))
+  return(c(auc, rsq, intercept, slope, auc_b, intercept_b, slope_b))
 }
 
 # Write function: clinical model
@@ -506,7 +506,7 @@ internal_val$clinical <- function(data, indices) {
   rsq <- rsq_b - rsq_o
   intercept <- intercept_b - intercept_o
   slope <- slope_b - slope_o
-  return(c(auc, rsq, intercept, slope))
+  return(c(auc, rsq, intercept, slope, auc_b, intercept_b, slope_b))
 }
 
 # Write function: ehr1 model
@@ -554,7 +554,7 @@ internal_val$ehr1 <- function(data, indices) {
   rsq <- rsq_b - rsq_o
   intercept <- intercept_b - intercept_o
   slope <- slope_b - slope_o
-  return(c(auc, rsq, intercept, slope))
+  return(c(auc, rsq, intercept, slope, auc_b, intercept_b, slope_b))
 }
 
 # Write function: ehr2 model
@@ -602,7 +602,7 @@ internal_val$ehr2 <- function(data, indices) {
   rsq <- rsq_b - rsq_o
   intercept <- intercept_b - intercept_o
   slope <- slope_b - slope_o
-  return(c(auc, rsq, intercept, slope))
+  return(c(auc, rsq, intercept, slope, auc_b, intercept_b, slope_b))
 }
 
 # Step 9.2: Internal validation for optimism corrected performance (bootstrap 1000 samples)
@@ -623,76 +623,84 @@ boot_ehr2 <- boot(data = E, statistic = internal_val$ehr2, R = n_bootstrap)
 internal_validation <- data.frame(matrix(nrow = 7, ncol = 10))
 rownames(internal_validation) <- c('basic1', 'basic2', 'cvd1', 'cvd2', 'clinical', 'ehr1', 'ehr2')
 colnames(internal_validation) <- c('AUC', 'AUC_l', 'AUC_u', 'R-squared', 'intercept', 'intercept_l', 'intercept_u', 'slope', 'slope_l', 'slope_u')
+# Basic 1 model
 internal_validation[1,1] <- apparent_performance[1,1] - mean(boot_basic1$t[,1])
-internal_validation[1,2] <- apparent_performance[2,1] - mean(boot_basic1$t[,1])
-internal_validation[1,3] <- apparent_performance[3,1] - mean(boot_basic1$t[,1])
+internal_validation[1,2] <- quantile(boot_basic1$t[,5], probs = 0.025) - mean(boot_basic1$t[,1])
+internal_validation[1,3] <- quantile(boot_basic1$t[,5], probs = 0.975) - mean(boot_basic1$t[,1])
 internal_validation[1,4] <- apparent_performance[4,1] - mean(boot_basic1$t[,2])
 internal_validation[1,5] <- apparent_performance[5,1] - mean(boot_basic1$t[,3])
-internal_validation[1,6] <- apparent_performance[6,1] - mean(boot_basic1$t[,3])
-internal_validation[1,7] <- apparent_performance[7,1] - mean(boot_basic1$t[,3])
+internal_validation[1,6] <- quantile(boot_basic1$t[,6], probs = 0.025) - mean(boot_basic1$t[,3])
+internal_validation[1,7] <- quantile(boot_basic1$t[,6], probs = 0.975) - mean(boot_basic1$t[,3])
 internal_validation[1,8] <- apparent_performance[8,1] - mean(boot_basic1$t[,4])
-internal_validation[1,9] <- apparent_performance[9,1] - mean(boot_basic1$t[,4])
-internal_validation[1,10] <- apparent_performance[10,1] - mean(boot_basic1$t[,4])
+internal_validation[1,9] <- quantile(boot_basic1$t[,7], probs = 0.025) - mean(boot_basic1$t[,4])
+internal_validation[1,10] <- quantile(boot_basic1$t[,7], probs = 0.975) - mean(boot_basic1$t[,4])
+# Basic 2 model
 internal_validation[2,1] <- apparent_performance[1,2] - mean(boot_basic2$t[,1])
-internal_validation[2,2] <- apparent_performance[2,2] - mean(boot_basic2$t[,1])
-internal_validation[2,3] <- apparent_performance[3,2] - mean(boot_basic2$t[,1])
+internal_validation[2,2] <- quantile(boot_basic2$t[,5], probs = 0.025) - mean(boot_basic2$t[,1])
+internal_validation[2,3] <- quantile(boot_basic2$t[,5], probs = 0.975) - mean(boot_basic2$t[,1])
 internal_validation[2,4] <- apparent_performance[4,2] - mean(boot_basic2$t[,2])
 internal_validation[2,5] <- apparent_performance[5,2] - mean(boot_basic2$t[,3])
-internal_validation[2,6] <- apparent_performance[6,2] - mean(boot_basic2$t[,3])
-internal_validation[2,7] <- apparent_performance[7,2] - mean(boot_basic2$t[,3])
+internal_validation[2,6] <- quantile(boot_basic2$t[,6], probs = 0.025) - mean(boot_basic2$t[,3])
+internal_validation[2,7] <- quantile(boot_basic2$t[,6], probs = 0.975) - mean(boot_basic2$t[,3])
 internal_validation[2,8] <- apparent_performance[8,2] - mean(boot_basic2$t[,4])
-internal_validation[2,9] <- apparent_performance[9,2] - mean(boot_basic2$t[,4])
-internal_validation[2,10] <- apparent_performance[10,2] - mean(boot_basic2$t[,4])
+internal_validation[2,9] <- quantile(boot_basic2$t[,7], probs = 0.025) - mean(boot_basic2$t[,4])
+internal_validation[2,10] <- quantile(boot_basic2$t[,7], probs = 0.975) - mean(boot_basic2$t[,4])
+# CMD 1 model
 internal_validation[3,1] <- apparent_performance[1,3] - mean(boot_cvd1$t[,1])
-internal_validation[3,2] <- apparent_performance[2,3] - mean(boot_cvd1$t[,1])
-internal_validation[3,3] <- apparent_performance[3,3] - mean(boot_cvd1$t[,1])
+internal_validation[3,2] <- quantile(boot_cvd1$t[,5], probs = 0.025) - mean(boot_cvd1$t[,1])
+internal_validation[3,3] <- quantile(boot_cvd1$t[,5], probs = 0.975) - mean(boot_cvd1$t[,1])
 internal_validation[3,4] <- apparent_performance[4,3] - mean(boot_cvd1$t[,2])
 internal_validation[3,5] <- apparent_performance[5,3] - mean(boot_cvd1$t[,3])
-internal_validation[3,6] <- apparent_performance[6,3] - mean(boot_cvd1$t[,3])
-internal_validation[3,7] <- apparent_performance[7,3] - mean(boot_cvd1$t[,3])
+internal_validation[3,6] <- quantile(boot_cvd1$t[,6], probs = 0.025) - mean(boot_cvd1$t[,3])
+internal_validation[3,7] <- quantile(boot_cvd1$t[,6], probs = 0.975) - mean(boot_cvd1$t[,3])
 internal_validation[3,8] <- apparent_performance[8,3] - mean(boot_cvd1$t[,4])
-internal_validation[3,9] <- apparent_performance[9,3] - mean(boot_cvd1$t[,4])
-internal_validation[3,10] <- apparent_performance[10,3] - mean(boot_cvd1$t[,4])
+internal_validation[3,9] <- quantile(boot_cvd1$t[,7], probs = 0.025) - mean(boot_cvd1$t[,4])
+internal_validation[3,10] <- quantile(boot_cvd1$t[,7], probs = 0.975) - mean(boot_cvd1$t[,4])
+# CMD 2 model
 internal_validation[4,1] <- apparent_performance[1,4] - mean(boot_cvd2$t[,1])
-internal_validation[4,2] <- apparent_performance[2,4] - mean(boot_cvd2$t[,1])
-internal_validation[4,3] <- apparent_performance[3,4] - mean(boot_cvd2$t[,1])
+internal_validation[4,2] <- quantile(boot_cvd2$t[,5], probs = 0.025) - mean(boot_cvd2$t[,1])
+internal_validation[4,3] <- quantile(boot_cvd2$t[,5], probs = 0.975) - mean(boot_cvd2$t[,1])
 internal_validation[4,4] <- apparent_performance[4,4] - mean(boot_cvd2$t[,2])
 internal_validation[4,5] <- apparent_performance[5,4] - mean(boot_cvd2$t[,3])
-internal_validation[4,6] <- apparent_performance[6,4] - mean(boot_cvd2$t[,3])
-internal_validation[4,7] <- apparent_performance[7,4] - mean(boot_cvd2$t[,3])
+internal_validation[4,6] <- quantile(boot_cvd2$t[,6], probs = 0.025) - mean(boot_cvd2$t[,3])
+internal_validation[4,7] <- quantile(boot_cvd2$t[,6], probs = 0.975) - mean(boot_cvd2$t[,3])
 internal_validation[4,8] <- apparent_performance[8,4] - mean(boot_cvd2$t[,4])
-internal_validation[4,9] <- apparent_performance[9,4] - mean(boot_cvd2$t[,4])
-internal_validation[4,10] <- apparent_performance[10,4] - mean(boot_cvd2$t[,4])
+internal_validation[4,9] <- quantile(boot_cvd2$t[,7], probs = 0.025) - mean(boot_cvd2$t[,4])
+internal_validation[4,10] <- quantile(boot_cvd2$t[,7], probs = 0.975) - mean(boot_cvd2$t[,4])
+# Clinical model
 internal_validation[5,1] <- apparent_performance[1,5] - mean(boot_clinical$t[,1])
-internal_validation[5,2] <- apparent_performance[2,5] - mean(boot_clinical$t[,1])
-internal_validation[5,3] <- apparent_performance[3,5] - mean(boot_clinical$t[,1])
+internal_validation[5,2] <- quantile(boot_clinical$t[,5], probs = 0.025) - mean(boot_clinical$t[,1])
+internal_validation[5,3] <- quantile(boot_clinical$t[,5], probs = 0.975) - mean(boot_clinical$t[,1])
 internal_validation[5,4] <- apparent_performance[4,5] - mean(boot_clinical$t[,2])
 internal_validation[5,5] <- apparent_performance[5,5] - mean(boot_clinical$t[,3])
-internal_validation[5,6] <- apparent_performance[6,5] - mean(boot_clinical$t[,3])
-internal_validation[5,7] <- apparent_performance[7,5] - mean(boot_clinical$t[,3])
+internal_validation[5,6] <- quantile(boot_clinical$t[,6], probs = 0.025) - mean(boot_clinical$t[,3])
+internal_validation[5,7] <- quantile(boot_clinical$t[,6], probs = 0.975) - mean(boot_clinical$t[,3])
 internal_validation[5,8] <- apparent_performance[8,5] - mean(boot_clinical$t[,4])
-internal_validation[5,9] <- apparent_performance[9,5] - mean(boot_clinical$t[,4])
-internal_validation[5,10] <- apparent_performance[10,5] - mean(boot_clinical$t[,4])
+internal_validation[5,9] <- quantile(boot_clinical$t[,7], probs = 0.025) - mean(boot_clinical$t[,4])
+internal_validation[5,10] <- quantile(boot_clinical$t[,7], probs = 0.975) - mean(boot_clinical$t[,4])
+# EHR 1 model
 internal_validation[6,1] <- apparent_performance[1,6] - mean(boot_ehr1$t[,1])
-internal_validation[6,2] <- apparent_performance[2,6] - mean(boot_ehr1$t[,1])
-internal_validation[6,3] <- apparent_performance[3,6] - mean(boot_ehr1$t[,1])
+internal_validation[6,2] <- quantile(boot_ehr1$t[,5], probs = 0.025) - mean(boot_ehr1$t[,1])
+internal_validation[6,3] <- quantile(boot_ehr1$t[,5], probs = 0.975) - mean(boot_ehr1$t[,1])
 internal_validation[6,4] <- apparent_performance[4,6] - mean(boot_ehr1$t[,2])
 internal_validation[6,5] <- apparent_performance[5,6] - mean(boot_ehr1$t[,3])
-internal_validation[6,6] <- apparent_performance[6,6] - mean(boot_ehr1$t[,3])
-internal_validation[6,7] <- apparent_performance[7,6] - mean(boot_ehr1$t[,3])
+internal_validation[6,6] <- quantile(boot_ehr1$t[,6], probs = 0.025) - mean(boot_ehr1$t[,3])
+internal_validation[6,7] <- quantile(boot_ehr1$t[,6], probs = 0.975) - mean(boot_ehr1$t[,3])
 internal_validation[6,8] <- apparent_performance[8,6] - mean(boot_ehr1$t[,4])
-internal_validation[6,9] <- apparent_performance[9,6] - mean(boot_ehr1$t[,4])
-internal_validation[6,10] <- apparent_performance[10,6] - mean(boot_ehr1$t[,4])
+internal_validation[6,9] <- quantile(boot_ehr1$t[,7], probs = 0.025) - mean(boot_ehr1$t[,4])
+internal_validation[6,10] <- quantile(boot_ehr1$t[,7], probs = 0.975) - mean(boot_ehr1$t[,4])
+# EHR 2 model
 internal_validation[7,1] <- apparent_performance[1,7] - mean(boot_ehr2$t[,1])
-internal_validation[7,2] <- apparent_performance[2,7] - mean(boot_ehr2$t[,1])
-internal_validation[7,3] <- apparent_performance[3,7] - mean(boot_ehr2$t[,1])
+internal_validation[7,2] <- quantile(boot_ehr2$t[,5], probs = 0.025) - mean(boot_ehr2$t[,1])
+internal_validation[7,3] <- quantile(boot_ehr2$t[,5], probs = 0.975) - mean(boot_ehr2$t[,1])
 internal_validation[7,4] <- apparent_performance[4,7] - mean(boot_ehr2$t[,2])
 internal_validation[7,5] <- apparent_performance[5,7] - mean(boot_ehr2$t[,3])
-internal_validation[7,6] <- apparent_performance[6,7] - mean(boot_ehr2$t[,3])
-internal_validation[7,7] <- apparent_performance[7,7] - mean(boot_ehr2$t[,3])
+internal_validation[7,6] <- quantile(boot_ehr2$t[,6], probs = 0.025) - mean(boot_ehr2$t[,3])
+internal_validation[7,7] <- quantile(boot_ehr2$t[,6], probs = 0.975) - mean(boot_ehr2$t[,3])
 internal_validation[7,8] <- apparent_performance[8,7] - mean(boot_ehr2$t[,4])
-internal_validation[7,9] <- apparent_performance[9,7] - mean(boot_ehr2$t[,4])
-internal_validation[7,10] <- apparent_performance[10,7] - mean(boot_ehr2$t[,4])
+internal_validation[7,9] <- quantile(boot_ehr2$t[,7], probs = 0.025) - mean(boot_ehr2$t[,4])
+internal_validation[7,10] <- quantile(boot_ehr2$t[,7], probs = 0.975) - mean(boot_ehr2$t[,4])
+# Save internal validation results
 write.csv(internal_validation, 'internal_validation.csv')
 
 # Explicit unit check for calculation of optimism-corrected model performance for one metric (clinical model, metric: c-statistic)
