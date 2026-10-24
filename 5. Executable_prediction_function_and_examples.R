@@ -6,13 +6,12 @@
 # For predictor levels: see Tablse S8 (Supplementary materials)
 # Lambda value used for the final model: lambda.min, equals 0.000847
 
-# Set working directory
-wd <- # Insert working directory where coefficients_final_model.csv is stored
-setwd(wd)
+# Select the file containing the full-precision coefficients
+coefficient_file <- file.choose()
 
 # Load full-precision coefficients
 coefs <- read.csv(
-  "Coefficients_final_model.csv",
+  coefficient_file,
   sep = ';',
   stringsAsFactors = FALSE
 )
