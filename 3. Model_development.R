@@ -619,7 +619,8 @@ boot_clinical <- boot(data = E, statistic = internal_val$clinical, R = n_bootstr
 boot_ehr1 <- boot(data = E, statistic = internal_val$ehr1, R = n_bootstrap)
 boot_ehr2 <- boot(data = E, statistic = internal_val$ehr2, R = n_bootstrap)
 
-# Create dataframe to store results and subtract mean optimism from apparent model performance to obtain optimism-corrected performance
+# Create dataframe to store results, subtract mean optimism from apparent model performance to obtain optimism-corrected performance, and 
+# obtain location-shifted confidence intervals based on bootstrap distribution
 internal_validation <- data.frame(matrix(nrow = 7, ncol = 10))
 rownames(internal_validation) <- c('basic1', 'basic2', 'cvd1', 'cvd2', 'clinical', 'ehr1', 'ehr2')
 colnames(internal_validation) <- c('AUC', 'AUC_l', 'AUC_u', 'R-squared', 'intercept', 'intercept_l', 'intercept_u', 'slope', 'slope_l', 'slope_u')
